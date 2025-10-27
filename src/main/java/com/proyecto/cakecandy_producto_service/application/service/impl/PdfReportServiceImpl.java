@@ -28,10 +28,8 @@ public class PdfReportServiceImpl {
                 addWatermark(contentStream, page);
                 addHeader(contentStream);
 
-                // Ajustar posición del título principal hacia abajo
                 writeText(contentStream, new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16, 50, 650, "Reporte de Inventario de Productos");
 
-                // Ajustar posición de la tabla hacia abajo
                 drawTable(contentStream, productos, 630);
 
                 addFooter(contentStream, 1);
@@ -45,7 +43,6 @@ public class PdfReportServiceImpl {
 
     private void addHeader(PDPageContentStream contentStream) throws IOException {
         String fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-        // Ajustar posición del header hacia abajo
         writeText(contentStream, new PDType1Font(Standard14Fonts.FontName.HELVETICA), 10, 450, 750, "Fecha: " + fecha);
         writeText(contentStream, new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12, 50, 750, "Cake Candy");
     }
@@ -65,9 +62,8 @@ public class PdfReportServiceImpl {
         float pageWidth = page.getMediaBox().getWidth();
         float pageHeight = page.getMediaBox().getHeight();
 
-        // Ajustar la posición del watermark más hacia el centro
         float posX = pageWidth / 4;
-        float posY = pageHeight / 2.5f; // Más centrado verticalmente
+        float posY = pageHeight / 2.5f;
 
         contentStream.beginText();
         contentStream.setTextMatrix(
@@ -80,7 +76,6 @@ public class PdfReportServiceImpl {
         contentStream.showText("Cake Candy");
         contentStream.endText();
 
-        // Restaura transparencia y color
         gs.setNonStrokingAlphaConstant(1.0f);
         contentStream.setGraphicsStateParameters(gs);
         contentStream.setNonStrokingColor(Color.BLACK);
@@ -92,14 +87,12 @@ public class PdfReportServiceImpl {
         final float tableWidth = 500f;
         final float margin = 50;
 
-        float[] colWidths = {40, 260, 50, 70, 80}; // Anchos de columna
+        float[] colWidths = {40, 260, 50, 70, 80};
 
-        // Dibuja el fondo de la cabecera
         contentStream.setNonStrokingColor(Color.DARK_GRAY);
         contentStream.addRect(margin, y - rowHeight, tableWidth, rowHeight);
         contentStream.fill();
 
-        // Dibuja las líneas de las filas
         contentStream.setStrokingColor(Color.LIGHT_GRAY);
         for (int i = 0; i <= rows; i++) {
             contentStream.moveTo(margin, y - (i * rowHeight));
@@ -107,7 +100,6 @@ public class PdfReportServiceImpl {
             contentStream.stroke();
         }
 
-        // Dibuja las líneas de las columnas
         float nextX = margin;
         for (float colWidth : colWidths) {
             contentStream.moveTo(nextX, y);
@@ -119,7 +111,6 @@ public class PdfReportServiceImpl {
         contentStream.lineTo(margin + tableWidth, y - (rows * rowHeight));
         contentStream.stroke();
 
-        // Escribe el texto de la cabecera
         contentStream.setNonStrokingColor(Color.WHITE);
         String[] headers = {"ID", "Nombre del Producto", "Stock", "P. Costo", "P. Venta"};
         float textX = margin + 5;
@@ -129,7 +120,6 @@ public class PdfReportServiceImpl {
             textX += colWidths[i];
         }
 
-        // Escribe el contenido de las filas
         contentStream.setNonStrokingColor(Color.BLACK);
         textY -= rowHeight;
         for (Producto producto : productos) {

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ProductoMapper {
 
-    // Inyectamos los repositorios para poder buscar las entidades relacionadas
     private final CategoriaRepository categoriaRepository;
     private final MarcaRepository marcaRepository;
     private final ProveedorRepository proveedorRepository;
@@ -27,7 +26,6 @@ public class ProductoMapper {
         producto.setPrecioCosto(dto.getPrecioCosto());
         producto.setStock(dto.getStock());
 
-        // Buscamos las entidades completas usando los IDs del DTO
         Categoria categoria = categoriaRepository.findById(dto.getIdCategoria())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada con ID: " + dto.getIdCategoria()));
         Marca marca = marcaRepository.findById(dto.getIdMarca())
@@ -50,7 +48,6 @@ public class ProductoMapper {
         dto.setPrecioCosto(entity.getPrecioCosto());
         dto.setStock(entity.getStock());
 
-        // Mapeamos las entidades anidadas a sus DTOs correspondientes
         if (entity.getCategoria() != null) {
             CategoriaDto categoriaDto = new CategoriaDto();
             categoriaDto.setIdCategoria(entity.getCategoria().getIdCategoria());

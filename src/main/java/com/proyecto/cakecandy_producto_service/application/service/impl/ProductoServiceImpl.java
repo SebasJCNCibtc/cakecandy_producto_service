@@ -58,13 +58,11 @@ public class ProductoServiceImpl implements ProductoService {
         Producto existingProducto = productoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
 
-        // Actualizamos los campos del producto existente
         existingProducto.setNombreProducto(requestDto.getNombreProducto());
         existingProducto.setPrecioVenta(requestDto.getPrecioVenta());
         existingProducto.setPrecioCosto(requestDto.getPrecioCosto());
         existingProducto.setStock(requestDto.getStock());
 
-        // Actualizamos las relaciones
         existingProducto.setCategoria(categoriaRepository.findById(requestDto.getIdCategoria())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada con ID: " + requestDto.getIdCategoria())));
         existingProducto.setMarca(marcaRepository.findById(requestDto.getIdMarca())
@@ -97,7 +95,7 @@ public class ProductoServiceImpl implements ProductoService {
         producto.setStock(nuevoStock);
         productoRepository.save(producto);
     }
-    // En ProductoServiceImpl.java
+
     @Override
     @Transactional
     public void addStock(Integer id, Integer cantidad) {
